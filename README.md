@@ -18,6 +18,7 @@ Important notes:
 
 ## Folder Structure
 
+```
 .
 ├── README.md
 ├── Dockerfile
@@ -53,6 +54,7 @@ Important notes:
 └── scripts
     ├── dev.sh
     └── dev.ps1
+```
 
 ## Quick Start
 
@@ -60,9 +62,9 @@ We recommend Python 3.11+.
 
 ### 1) macOS / Linux (bash or zsh)
 
-\`\`\`bash
+```bash
 # Clone your repository (skip if already inside)
-# git clone <your-fork-url> && cd <repo>
+# git clone https://github.com/DevRizz/QSVM_CyberX && cd QSVM_CyberX
 
 # Create venv
 python3 -m venv .venv
@@ -87,7 +89,7 @@ python -c "from quantum_anomaly.storage.db import init_db; init_db()"
 
 # Run Streamlit
 streamlit run streamlit_app/app.py
-\`\`\`
+```
 
 Live capture permissions:
 - Linux: run with sudo OR grant capabilities:
@@ -119,3 +121,4 @@ python -c "from quantum_anomaly.storage.db import init_db; init_db()"
 
 # Run Streamlit (Run PowerShell as Administrator for live sniff)
 streamlit run streamlit_app/app.py
+```
