@@ -1,0 +1,128 @@
+Metadata-Version: 2.4
+Name: quantum-anomaly-qkd
+Version: 0.1.0
+Summary: Quantum kernel online anomaly detection with QKD-secured pipeline
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+
+# Quantum Kernel Online Anomaly Detection with QKD-secured Pipeline
+
+A full-stack system for real-time network anomaly detection that blends:
+- Live packet capture (or PCAP upload)
+- Feature extraction and scaling
+- Quantum kernel classifier (PennyLane) with Nyström approximation
+- Online learning: streaming baseline (River) and on-demand quantum SVM retraining
+- QKD (BB84) simulation to derive session keys
+- AES-GCM encryption of messages/logs using QKD-derived keys
+- Streamlit UI for control, visualization, and human-in-the-loop feedback
+- SQLite logging of events and anomalies
+
+This repository is self-contained with all code and commands.
+
+Important notes:
+- Live sniffing may require administrator privileges (root) or special capabilities.
+- QKD here is a protocol simulation (BB84) for software demonstration. Real QKD requires quantum channels and specialized hardware. We use the simulated key to secure your local pipeline (AES-GCM).
+
+## Folder Structure
+
+.
+├── README.md
+├── Dockerfile
+├── .env.example
+├── requirements.txt
+├── streamlit_app
+│   ├── app.py
+│   └── pages
+│       ├── 01_Live_Capture.py
+│       └── 02_PCAP_Upload.py
+├── quantum_anomaly
+│   ├── __init__.py
+│   ├── utils
+│   │   └── logging_setup.py
+│   ├── storage
+│   │   └── db.py
+│   ├── security
+│   │   ├── qkd.py
+│   │   └── secure_channel.py
+│   ├── capture
+│   │   ├── live_sniffer.py
+│   │   └── pcap_loader.py
+│   ├── features
+│   │   └── engine.py
+│   ├── quantum
+│   │   └── kernel.py
+│   ├── online
+│   │   └── buffer.py
+│   ├── models
+│   │   ├── online.py
+│   │   └── quantum_svm.py
+│   └── orchestrator.py
+└── scripts
+    ├── dev.sh
+    └── dev.ps1
+
+## Quick Start
+
+We recommend Python 3.11+.
+
+### 1) macOS / Linux (bash or zsh)
+
+\`\`\`bash
+# Clone your repository (skip if already inside)
+# git clone <your-fork-url> && cd <repo>
+
+# Create venv
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Upgrade pip
+pip install --upgrade pip
+
+# Install system deps if you want live capture (scapy uses libpcap):
+# macOS (brew): brew install libpcap
+# Ubuntu/Debian: sudo apt-get update && sudo apt-get install -y libpcap-dev tshark
+# (For pyshark, tshark is recommended.)
+
+# Install Python deps
+pip install -r requirements.txt
+
+# Copy and edit env (optional)
+cp .env.example .env
+
+# Initialize DB
+python -c "from quantum_anomaly.storage.db import init_db; init_db()"
+
+# Run Streamlit
+streamlit run streamlit_app/app.py
+\`\`\`
+
+Live capture permissions:
+- Linux: run with sudo OR grant capabilities:
+  sudo setcap cap_net_raw,cap_net_admin=eip $(which python3)
+- macOS: run as sudo (Terminal prompt will ask for admin password).
+- Windows: run PowerShell as Administrator.
+
+### 2) Windows (PowerShell)
+
+```powershell
+# Create venv
+py -3 -m venv .venv
+. .\.venv\Scripts\Activate.ps1
+
+# Upgrade pip
+python -m pip install --upgrade pip
+
+# Install Wireshark/TShark if using pyshark:
+# Download from https://www.wireshark.org/#download and make sure tshark is in PATH
+
+# Install Python deps
+pip install -r requirements.txt
+
+# Copy and edit env (optional)
+Copy-Item .env.example .env
+
+# Initialize DB
+python -c "from quantum_anomaly.storage.db import init_db; init_db()"
+
+# Run Streamlit (Run PowerShell as Administrator for live sniff)
+streamlit run streamlit_app/app.py

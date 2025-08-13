@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantum-anomaly-qkd"
+version = "0.1.0"
+description = "Quantum kernel online anomaly detection with QKD-secured pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["quantum_anomaly*"]

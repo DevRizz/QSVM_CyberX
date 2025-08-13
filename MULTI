@@ -1,0 +1,51 @@
+# streamlit_app/app.py
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+# streamlit_app/pages/01_Live_Capture.py
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+# streamlit_app/pages/02_PCAP_Upload.py
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+# scripts/dev.ps1
+pip install -r requirements.txt
+pip install -e .
+
+# scripts/dev.sh
+pip install -r requirements.txt
+pip install -e .
+
+# quantum_anomaly/capture/pcap_loader.py
+from typing import List
+from scapy.all import rdpcap, Packet
+import io
+import tempfile
+import os
+
+def load_pcap(file_like: io.BytesIO) -> List[Packet]:
+    """
+    Load packets from an uploaded PCAP file-like object in Streamlit.
+    Uses a temporary file for maximum compatibility with scapy.
+    """
+    file_like.seek(0)
+    data = file_like.read()
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pcap") as tmp:
+        tmp.write(data)
+        tmp_path = tmp.name
+    try:
+        packets = rdpcap(tmp_path)
+        return list(packets)
+    finally:
+        try:
+            os.remove(tmp_path)
+        except OSError:
+            pass

@@ -1,0 +1,30 @@
+# Core
+numpy>=1.26
+pandas>=2.2
+scikit-learn>=1.5
+scipy>=1.13
+pydantic>=2.8
+tqdm>=4.66
+
+# Streamlit + Viz
+streamlit>=1.37
+plotly>=5.23
+
+# Networking
+scapy>=2.5
+pyshark>=0.6
+
+# Quantum
+pennylane>=0.39
+
+# Online ML
+river>=0.21
+
+# Crypto
+cryptography>=43.0
+
+# Database
+SQLAlchemy>=2.0
+
+# Optional: speedups
+uvloop>=0.20; sys_platform != "win32"
